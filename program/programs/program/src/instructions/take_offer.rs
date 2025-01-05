@@ -1,10 +1,12 @@
 use anchor_lang::prelude::*;
 
 use anchor_spl::{
-    associated_token::AssociatedToken, token::Token, token_interface::{
+    associated_token::AssociatedToken,
+    token::Token,
+    token_interface::{
         close_account, transfer_checked, CloseAccount, Mint, TokenAccount, TokenInterface,
         TransferChecked,
-    }
+    },
 };
 
 use crate::Offer;
@@ -67,4 +69,8 @@ pub struct TakeOffer<'info> {
         associated_token::token_program = token_program,
     )]
     vault: InterfaceAccount<'info, TokenAccount>,
+
+    pub system_program: Program<'info, System>,
+    pub token_program: Interface<'info, TokenInterface>,
+    pub associated_token_program: Program<'info, AssociatedToken>,
 }
