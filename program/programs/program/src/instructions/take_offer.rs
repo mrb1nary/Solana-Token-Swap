@@ -74,3 +74,20 @@ pub struct TakeOffer<'info> {
     pub token_program: Interface<'info, TokenInterface>,
     pub associated_token_program: Program<'info, AssociatedToken>,
 }
+
+pub fn withdraw_and_close_vault(ctx: Context<TakeOffer>) -> Result<()> {
+    let seeds = &[
+        b"offer",
+        ctx.accounts.maker.to_account_info().key.as_ref(),
+        &ctx.accounts.offer.id.to_le_bytes()[..],
+        &[ctx.accounts.offer.bump],
+    ];
+    let signer_seeds = [&seeds[..]];
+
+    let accounts = TransferChecked {
+        from: ctx.accounts.vault.to_account_info(),
+        to: ctx.accounts.taker_token_account_a.to_account_info(),
+        mint: ctx.accounts.token_mint_a.to_account_info(),
+        authority: ctx.accounts.offer.to_account_info(),
+    };
+}
